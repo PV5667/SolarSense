@@ -6,7 +6,6 @@ function SelectionInterface () {
   return (
     <div>
         <Map />
-        <MapButtons />
     </div>
   );
 }

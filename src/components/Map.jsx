@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useState } from 'react';
 import DeckGL from '@deck.gl/react';
@@ -5,24 +6,13 @@ import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, ViewMode, DrawRecta
 import { EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
-import {Box, Button, Grid} from "@mantine/core"
+import {Box, Button, Grid, Stack, Center, Title} from "@mantine/core"
 import { MapView } from '@deck.gl/core';
 import { bboxPolygon, area, bbox, squareGrid } from '@turf/turf';
 import * as fs from "fs";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-
-const polygonData = {}
-
-
-const box = [-122.1404, 37.7139, -122.1346, 37.7195];
-//const bbox = [37.3602, -121.9742, 37.646, -121.9686];
-const poly = bboxPolygon(box);
-const sqm = area(poly);
-
-console.log(sqm);
-console.log(poly);
-
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiZ2Vvcmdpb3MtdWJlciIsImEiOiJjanZidTZzczAwajMxNGVwOGZrd2E5NG90In0.gdsRu_UeU_uPi9IulBruXA';
+const MAPBOX_ACCESS_TOKEN = '';
 
 const INITIAL_VIEW_STATE = {
   longitude: -120.4265,
@@ -40,21 +30,58 @@ function Map () {
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState(
     []
   );
+  const [panels, setPanels] = useState(
+    []);
+  const [numPanelsFound, setNumPanelsFound] = useState(0);
 
+  function submitSelection () {
+    console.log("Inputted Selection:" + JSON.stringify(features));
+    fetch('http://127.0.0.1:5000/detect', {
+      method : 'POST',
+      headers : {
+        'Content-Type' : 'application/json',
+      },
+      body : JSON.stringify(
+        features
+      ),
+  })
+  .then(function (response){
+      if(response.ok) {
+          response.json()
+          .then(function(response) {
+              console.log(typeof(JSON.parse(response)));
+              const newPanels = JSON.parse(response).features;
+              setPanels(newPanels);
+              setNumPanelsFound(newPanels.length);
+              setFeatures(null);
+              console.log(newPanels);
+          });
+      }
+      else {
+          console.log(response);
+          throw Error('Something went wrong');
+      }
+  })
+  }
+
+  function calculateArea (features) {
+    const sqm = area(features);
+    const sqkm = (sqm / Math.pow(1000, 2)).toFixed(2);
+    return sqkm;
+  }
+  
   const panelLayer = new PolygonLayer({
     id: "poly-layers",
-    data: polygonData.features,
+    data: panels,
     pickable: true,
-    //stroked: true,
     filled: true,
     extruded: false,
     wireframe: true,
-    //lineWidthMinPixels: 1,
     getPolygon: d => d.geometry.coordinates,
-    //getLineColor: [80, 80, 80],
-    getFillColor: [60, 255, 80],
-    //getLineWidth: 1
+    getFillColor: [255, 0, 0],
+    _normalize: true,
   });
+  
 
   const editableGjsonLayer = new EditableGeoJsonLayer({
     id: 'geojson-layer',
@@ -63,42 +90,44 @@ function Map () {
     selectedFeatureIndexes: selectedFeatureIndexes,
     onEdit: ({ updatedData }) => {
       console.log(updatedData);
-      const newData = squareGrid(bbox(updatedData), 0.1);
+      const newData = squareGrid(bbox(updatedData), 0.12);
       console.log("New Data:")
       console.log(newData);
       setFeatures(newData);
-      saveSelection(newData);
     }
   });
 
-  function saveSelection (newData) {
-    const data = JSON.stringify(newData);
-    console.log(newData);
-  }
-
   return (
-    <div class="my-12">
+    <div>
+      <Center>
+      <Stack spacing="lg">
       <Box
-        sx={{ width: '80em', height: '50em', borderRadius: 4, position: 'relative' }}
+        sx={{ width: '50em', height: '50em', m: 4, borderRadius: 4, position: 'relative' }}
         className="ml-auto mr-auto"
       >
       <DeckGL
           initialViewState={INITIAL_VIEW_STATE}
-          controller={{
-            doubleClickZoom: false
-          }}
+          controller={{doubleClickZoom: false}}
           id="deck-gl"
           layers={[panelLayer, editableGjsonLayer]} 
           getCursor={editableGjsonLayer.getCursor.bind(editableGjsonLayer)}
         >
         <MapView id="map" controller={false} width="100%" height="100%">
-          <StaticMap mapStyle="mapbox://styles/mapbox/satellite-v9" mapboxAccessToken={MAPBOX_ACCESS_TOKEN} />
+            <StaticMap mapStyle="mapbox://styles/mapbox/satellite-v9" mapboxAccessToken={MAPBOX_ACCESS_TOKEN} />
         </MapView>
-        
         </DeckGL>
       </Box>
+      <Button variant="filled" color="indigo" radius="sm" size="lg" onClick={submitSelection}>
+      Submit Selection
+      </Button>
+      {numPanelsFound > 0 && ( 
+        <Title>{numPanelsFound} Panels Found</Title>
+      )}
+      </Stack>
+      </Center>
     </div>
   );
 }
 
 export default Map;
+
