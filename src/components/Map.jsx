@@ -12,12 +12,12 @@ import { bboxPolygon, area, bbox, squareGrid } from '@turf/turf';
 import * as fs from "fs";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicHY1NjY3IiwiYSI6ImNsZGFtOHVoejBiZ2Mzb3A2djgyaDl1OGEifQ.FSssERk7wLiG1fDpen0iXA';
+const MAPBOX_ACCESS_TOKEN = ''; 
 
 const INITIAL_VIEW_STATE = {
   longitude: -120.4265,
   latitude: 34.8670892225,
-  zoom: 16,
+  zoom: 16, 
   pitch: 0,
   bearing: 0,
 };
@@ -28,7 +28,7 @@ function Map () {
   });
   const [analysisMode, setAnalysisMode] = useState(true);
   const [mode, setMode] = useState(() => DrawRectangleMode); 
-  const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState(
+  const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState( 
     []
   );
   const [panels, setPanels] = useState(
@@ -49,9 +49,9 @@ function Map () {
   .then(function (response){
       if(response.ok) {
           response.json()
-          .then(function(response) {
+          .then(function(response) { 
               console.log(typeof(JSON.parse(response)));
-              const newPanels = JSON.parse(response).features;
+              const newPanels = JSON.parse(response).features; 
               setPanels(newPanels);
               setNumPanelsFound(newPanels.length);
               setFeatures(null);
@@ -138,12 +138,12 @@ function Map () {
       <>
       <Title order={4} c="white">Draw a rectangle around the area you want to analyze and then submit your selection.</Title>
       <Button variant="filled" color="indigo" radius="sm" size="lg" onClick={submitSelection}>
-      Submit Selection
+      Submit Selection 
       </Button>
       </>
       )}
       {numPanelsFound > 0 && ( 
-        <Title>{numPanelsFound} Panels Found</Title>
+        <Title>{numPanelsFound} Panels Found</Title> 
       )}
       </Stack>
       </Center>
