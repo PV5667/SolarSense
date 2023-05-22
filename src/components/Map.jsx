@@ -6,13 +6,13 @@ import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, ViewMode, DrawRecta
 import { EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
-import {Box, Button, Grid, Stack, Center, Title} from "@mantine/core"
+import {Box, Button, Grid, Stack, Center, Title, Switch, Group} from "@mantine/core"
 import { MapView } from '@deck.gl/core';
 import { bboxPolygon, area, bbox, squareGrid } from '@turf/turf';
 import * as fs from "fs";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MAPBOX_ACCESS_TOKEN = '';
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicHY1NjY3IiwiYSI6ImNsZGFtOHVoejBiZ2Mzb3A2djgyaDl1OGEifQ.FSssERk7wLiG1fDpen0iXA';
 
 const INITIAL_VIEW_STATE = {
   longitude: -120.4265,
@@ -26,6 +26,7 @@ function Map () {
     type: "FeatureCollection",
     features: []//panels.features,
   });
+  const [analysisMode, setAnalysisMode] = useState(true);
   const [mode, setMode] = useState(() => DrawRectangleMode); 
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState(
     []
@@ -55,6 +56,7 @@ function Map () {
               setNumPanelsFound(newPanels.length);
               setFeatures(null);
               console.log(newPanels);
+              setMode(() => ViewMode);
           });
       }
       else {
@@ -86,7 +88,7 @@ function Map () {
   const editableGjsonLayer = new EditableGeoJsonLayer({
     id: 'geojson-layer',
     data: features,
-    mode: DrawRectangleMode, 
+    mode: mode, 
     selectedFeatureIndexes: selectedFeatureIndexes,
     onEdit: ({ updatedData }) => {
       console.log(updatedData);
@@ -117,9 +119,29 @@ function Map () {
         </MapView>
         </DeckGL>
       </Box>
+      <Group position="center" direction="row" spacing="xs">
+      <Switch
+        checked={analysisMode}
+        onChange={() => {
+          setAnalysisMode(!analysisMode);
+          if (!analysisMode) {
+            setMode(() => DrawRectangleMode);
+          } else {
+            setMode(() => ViewMode);
+          }
+        }}
+      >
+      </Switch>
+      <Title order={4} c="blue">Analysis Mode</Title>
+      </Group>
+      {analysisMode && (
+      <>
+      <Title order={4} c="white">Draw a rectangle around the area you want to analyze and then submit your selection.</Title>
       <Button variant="filled" color="indigo" radius="sm" size="lg" onClick={submitSelection}>
       Submit Selection
       </Button>
+      </>
+      )}
       {numPanelsFound > 0 && ( 
         <Title>{numPanelsFound} Panels Found</Title>
       )}
