@@ -5,7 +5,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import "/src/geocoder.css";
 import { LocationContext } from './LocationProvider';
 
-mapboxgl.accessToken = '';
+mapboxgl.accessToken = 'pk.eyJ1IjoicHY1NjY3IiwiYSI6ImNsZGFtOHVoejBiZ2Mzb3A2djgyaDl1OGEifQ.FSssERk7wLiG1fDpen0iXA';
 
 function SearchBar ()  {
     const geocoderRef = useRef(null);

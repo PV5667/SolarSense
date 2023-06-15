@@ -14,7 +14,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import {LocationContext} from './LocationProvider';
 
 
-const MAPBOX_ACCESS_TOKEN = '';
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicHY1NjY3IiwiYSI6ImNsZGFtOHVoejBiZ2Mzb3A2djgyaDl1OGEifQ.FSssERk7wLiG1fDpen0iXA';
 
 const INITIAL_VIEW_STATE = {
   longitude: -120.4265,
@@ -155,7 +155,6 @@ function Map () {
       </Group>
       {analysisMode && (
       <>
-      <Title order={4} c="white">Draw a rectangle around the area you want to analyze and then submit your selection.</Title>
       <Button variant="filled" color="indigo" radius="sm" size="lg" onClick={submitSelection}>
       Submit Selection
       </Button>
@@ -168,7 +167,7 @@ function Map () {
         </Group>
       )}
       {numPanelsFound > 0 && ( 
-        <Title>{numPanelsFound} Panels Found</Title>
+        <Title c="blue">{numPanelsFound} Panels Found</Title>
       )}
       </Stack>
       </Center>
