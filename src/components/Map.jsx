@@ -71,7 +71,10 @@ function Map () {
               const newPanels = JSON.parse(response).features;
               setPanels(newPanels);
               setNumPanelsFound(newPanels.length);
-              setFeatures(null);
+              setFeatures({
+                type: "FeatureCollection",
+                features: []//panels.features,
+              });
               console.log(newPanels);
               setMode(() => ViewMode);
               setAnalysisMode(false);
