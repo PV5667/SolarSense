@@ -53,7 +53,7 @@ function Map () {
   function submitSelection () {
     console.log("Inputted Selection:" + JSON.stringify(features));
     setAwaitingResponse(true);
-    fetch('http://127.0.0.1:5000/detect', {
+    fetch('https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect', {
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
