@@ -53,7 +53,9 @@ function Map () {
   function submitSelection () {
     console.log("Inputted Selection:" + JSON.stringify(features));
     setAwaitingResponse(true);
-    fetch('https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect', {
+    //http://127.0.0.1:5000/detect
+    //https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect
+    fetch('http://127.0.0.1:5000/detect', {
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
@@ -158,9 +160,9 @@ function Map () {
       </Group>
       {analysisMode && (
       <>
-      <Button variant="filled" color="indigo" radius="sm" size="lg" onClick={submitSelection}>
-      Submit Selection
-      </Button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={submitSelection}>
+        Submit Selection
+      </button>
       </>
       )}
       {awaitingResponse && (
