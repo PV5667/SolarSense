@@ -55,7 +55,7 @@ function Map () {
     setAwaitingResponse(true);
     //http://127.0.0.1:5000/detect
     //https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect
-    fetch('https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect', {
+    fetch('http://ec2-3-21-106-235.us-east-2.compute.amazonaws.com/detect', {
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
