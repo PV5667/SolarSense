@@ -6,12 +6,12 @@ import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, ViewMode, DrawRecta
 import { EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
-import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader} from "@mantine/core"
+import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal} from "@mantine/core"
 import { MapView, FlyToInterpolator } from '@deck.gl/core';
 import { bboxPolygon, area, bbox, squareGrid } from '@turf/turf';
-import * as fs from "fs";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {LocationContext} from './LocationProvider';
+import { useDisclosure } from '@mantine/hooks';
 
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicHY1NjY3IiwiYSI6ImNsZGFtOHVoejBiZ2Mzb3A2djgyaDl1OGEifQ.FSssERk7wLiG1fDpen0iXA';
@@ -33,6 +33,8 @@ function Map () {
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState(
     []
   );
+  // For Error Modal
+  const [opened, {open, close}] = useDisclosure(false);
   const [awaitingResponse, setAwaitingResponse] = useState(false);
   const [panels, setPanels] = useState(
     []);
@@ -56,7 +58,8 @@ function Map () {
     //http://127.0.0.1:5000/detect
     //https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect
     //https://api.lec-hacks.org/detect
-    fetch('https://api.lec-hacks.org/detect', {
+    //https://api.lec-hacks.org/detect
+    fetch('http://127.0.0.1:5000/detect', {
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
@@ -85,6 +88,7 @@ function Map () {
       }
       else {
           console.log(response);
+          open();
           throw Error('Something went wrong');
       }
   })
@@ -125,6 +129,11 @@ function Map () {
 
   return (
     <>
+    <Modal size="xl" opened={opened} onClose={close} withCloseButton={false} centered>
+        <Group position="center" direction="row" spacing="xs">
+        Oops! Something went wrong. A quick refresh should fix it.
+        </Group>
+    </Modal>
     <div>
       <Center>
       <Stack spacing="lg">
