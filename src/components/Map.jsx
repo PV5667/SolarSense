@@ -58,8 +58,7 @@ function Map () {
     //http://127.0.0.1:5000/detect
     //https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect
     //https://api.lec-hacks.org/detect
-    //https://api.lec-hacks.org/detect
-    fetch('http://127.0.0.1:5000/detect', {
+    fetch('https://api.lec-hacks.org/detect', {
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
