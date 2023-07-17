@@ -4,7 +4,7 @@ import SearchBar from './SearchBar';
 import { useState, useContext } from 'react'
 import { LocationContext } from './LocationProvider';
 import { FeaturesContext } from './FeaturesProvider';
-import { center, squareGrid, bbox } from '@turf/turf';
+import { center, squareGrid, bbox, buffer } from '@turf/turf';
 
 function Value({ file }) {
     return (
@@ -54,7 +54,7 @@ function InputChoices() {
       reader.onload = (event) => {
         const fileContent = JSON.parse(event.target.result);
         const options = { units: "kilometers", mask: fileContent};
-        setFeatures(squareGrid(bbox(fileContent), 0.12, options));
+        setFeatures(squareGrid(bbox(buffer(fileContent, 0.06)), 0.12, options));
         const uploadedCenter = center(fileContent.features[0].geometry);
         fileContent["center"] = uploadedCenter.geometry.coordinates;
         setUploadedGeoJSON(fileContent);
