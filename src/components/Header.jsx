@@ -18,7 +18,7 @@ function Header() {
         <div>
         <nav class="rounded-xl border-gray-200 px-4 lg:px-6 py-8 bg-neutral-950">
         <a href="/">
-        <Image fit="contain" height={60} src={"./src/assets/SolarSense_Logo.png"} />
+        <Image fit="contain" height={60} src={"./SolarSense_Logo.png"} />
         </a>
         </nav>
         <div class="mx-auto max-w-2xl py-6 pt-25 space-y-4">
