@@ -6,15 +6,20 @@ import './App.css'
 import SelectionInterface from './components/SelectionInterface';
 import Header from './components/Header';
 import { LocationProvider } from './components/LocationProvider';
+import InputChoices from "./components/InputChoices"
+import { FeaturesProvider } from './components/FeaturesProvider';
 
 function App() {
 
   return (
     <div className="App">
+      <FeaturesProvider>
       <LocationProvider>
         <Header />
+        <InputChoices />
         <SelectionInterface />
       </LocationProvider>
+      </FeaturesProvider>
     </div>
   )
 }

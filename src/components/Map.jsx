@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useRef, useContext } from 'react';
 import DeckGL from '@deck.gl/react';
-import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, ViewMode, DrawRectangleUsingThreePointsMode, DrawRectangleMode } from '@nebula.gl/edit-modes';
+import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, DrawPolygonMode, ViewMode, DrawRectangleUsingThreePointsMode, DrawRectangleMode } from '@nebula.gl/edit-modes';
 import { EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
@@ -11,6 +11,7 @@ import { MapView, FlyToInterpolator } from '@deck.gl/core';
 import { bboxPolygon, area, bbox, squareGrid } from '@turf/turf';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {LocationContext} from './LocationProvider';
+import { FeaturesContext } from './FeaturesProvider';
 import { useDisclosure } from '@mantine/hooks';
 
 
@@ -24,12 +25,9 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 function Map () {
-  const [features, setFeatures] = useState({
-    type: "FeatureCollection",
-    features: []//panels.features,
-  });
+  const [features, setFeatures] = useContext(FeaturesContext);
   const [analysisMode, setAnalysisMode] = useState(true);
-  const [mode, setMode] = useState(() => DrawRectangleMode); 
+  const [mode, setMode] = useState(() => DrawPolygonMode);//DrawRectangleMode); 
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState(
     []
   );
@@ -119,7 +117,8 @@ function Map () {
     selectedFeatureIndexes: selectedFeatureIndexes,
     onEdit: ({ updatedData }) => {
       console.log(updatedData);
-      const newData = squareGrid(bbox(updatedData), 0.12);
+      const options = { units: "kilometers", mask: updatedData};
+      const newData = squareGrid(bbox(updatedData), 0.12, options);
       console.log("New Data:")
       console.log(newData);
       setFeatures(newData);
@@ -158,7 +157,7 @@ function Map () {
         onChange={() => {
           setAnalysisMode(!analysisMode);
           if (!analysisMode) {
-            setMode(() => DrawRectangleMode);
+            setMode(() => DrawPolygonMode);
           } else {
             setMode(() => ViewMode);
           }
