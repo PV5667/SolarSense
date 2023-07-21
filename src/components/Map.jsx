@@ -1,11 +1,11 @@
 import React from 'react';
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import DeckGL from '@deck.gl/react';
 import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, DrawPolygonMode, ViewMode, DrawRectangleUsingThreePointsMode, DrawRectangleMode } from '@nebula.gl/edit-modes';
 import { EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
-import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal, SegmentedControl} from "@mantine/core"
+import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal, SegmentedControl, Progress} from "@mantine/core"
 import { MapView, FlyToInterpolator } from '@deck.gl/core';
 import { bboxPolygon, area, bbox, buffer, squareGrid } from '@turf/turf';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -37,6 +37,7 @@ function Map () {
   const [panels, setPanels] = useState(
     []);
   const [numPanelsFound, setNumPanelsFound] = useState(0);
+  const [progress, setProgress] = useState(0);
   const location = useContext(LocationContext)[0];
   console.log(location)
   const constructedViewState = {
@@ -47,7 +48,16 @@ function Map () {
     bearing: 0,
     transitionDuration: 5000,
     transitionInterpolator: new FlyToInterpolator()
-}
+  }
+  const progressBarRef = useRef(null)
+  const scrollToBottom = () => {
+      progressBarRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [awaitingResponse]);
+
   console.log("Map.jsx location: ", location);
 
   function submitSelection () {
@@ -151,6 +161,27 @@ function Map () {
       setFeatures(newData);
     }
   });
+  // For Progress Bar
+  let interval;
+  useEffect(() => {
+    if (awaitingResponse) {
+      interval = setInterval(() => {
+        setProgress((prev) => prev + Math.round(100/features.features.length));
+        console.log(awaitingResponse)
+      }, 2005);
+    } else {
+      console.log("Clearing Interval");
+      clearInterval(interval);
+    }
+  }, [awaitingResponse]);
+
+  useEffect(() => {
+    if (progress === 100 || progress > 100) {
+      setProgress("Almost Done...")
+      setAwaitingResponse(false);
+      clearInterval(interval);
+    }
+  }, [progress]);
 
   return (
     <>
@@ -188,7 +219,7 @@ function Map () {
       ]}
       />
       </Group>
-      {analysisMode && (
+      {analysisMode==="analysis" && (
       <>
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={submitSelection}>
         Submit Selection
@@ -196,10 +227,12 @@ function Map () {
       </>
       )}
       {awaitingResponse && (
+        <div class="p-6 space-y-4" ref={progressBarRef}>
+        <Progress value={progress} label={progress + "%"} size="xl" radius="xl" />
         <Group position="center" direction="row" spacing="xs">
-        <Loader />
         <Title order={4} c="white">Detecting Solar Panels...</Title>
         </Group>
+        </div>
       )}
       {numPanelsFound > 0 && ( 
         <>
