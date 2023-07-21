@@ -1,6 +1,6 @@
 import {Box, Center, Title} from "@mantine/core"
 import SearchBar from './SearchBar';
-import { Image } from '@mantine/core';
+import { Image, Text } from '@mantine/core';
 import { TypeAnimation } from 'react-type-animation';
 import { LinearGradient } from 'react-text-gradients'
 
@@ -16,23 +16,13 @@ const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicHY1NjY3IiwiYSI6ImNsZGFtOHVoejBiZ2Mzb3A2
 function Header() {
     return (
         <div>
-        <nav class="rounded-xl border-gray-200 px-4 lg:px-6 py-8 bg-neutral-950">
+        <nav class="rounded-xl px-4 lg:px-6 py-8">
         <a href="/">
         <Image fit="contain" height={60} src={"./SolarSense_Logo.png"} />
         </a>
         </nav>
         <div class="mx-auto max-w-2xl py-6 pt-25 space-y-4">
-        <TypeAnimation
-      sequence={[
-        // Same substring at the start will only be typed out once, initially
-        'Unlock Solar Panel Insights with Geospatial AI',
-        1000
-      ]}
-      wrapper="span"
-      speed={37}
-      style={{ fontWeight:"bold", fontSize: '45px', display: 'inline-block', color: "#e8caf1"}}
-      repeat={0}
-    />
+        <Text style={{ fontWeight:"bold", fontSize: '45px', display: 'inline-block', color: "#e8caf1"}}>Unlock Solar Panel Insights with Geospatial AI</Text>
         </div>
         </div>
     );

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useState, useRef, useContext } from 'react';
 import DeckGL from '@deck.gl/react';
@@ -6,7 +5,7 @@ import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, DrawPolygonMode, Vi
 import { EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
-import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal} from "@mantine/core"
+import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal, SegmentedControl} from "@mantine/core"
 import { MapView, FlyToInterpolator } from '@deck.gl/core';
 import { bboxPolygon, area, bbox, buffer, squareGrid } from '@turf/turf';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -27,7 +26,7 @@ const INITIAL_VIEW_STATE = {
 };
 function Map () {
   const [features, setFeatures] = useContext(FeaturesContext);
-  const [analysisMode, setAnalysisMode] = useState(true);
+  const [analysisMode, setAnalysisMode] = useState("analysis");
   const [mode, setMode] = useState(() => DrawPolygonMode);//DrawRectangleMode); 
   const [selectedFeatureIndexes, setSelectedFeatureIndexes] = useState(
     []
@@ -81,7 +80,7 @@ function Map () {
               });
               console.log(newPanels);
               setMode(() => ViewMode);
-              setAnalysisMode(false);
+              setAnalysisMode("view");
           });
       }
       else {
@@ -113,6 +112,16 @@ function Map () {
     const sqm = area(features);
     const sqkm = (sqm / Math.pow(1000, 2)).toFixed(2);
     return sqkm;
+  }
+
+  function changeAnalysisMode () {
+      if (analysisMode == "view") {
+        setMode(() => DrawPolygonMode);
+        setAnalysisMode("analysis");
+      } else {
+        setAnalysisMode("view");
+        setMode(() => ViewMode);
+      }
   }
   
   const panelLayer = new PolygonLayer({
@@ -170,19 +179,14 @@ function Map () {
         </DeckGL>
       </Box>
       <Group position="center" direction="row" spacing="xs">
-      <Switch
-        checked={analysisMode}
-        onChange={() => {
-          setAnalysisMode(!analysisMode);
-          if (!analysisMode) {
-            setMode(() => DrawPolygonMode);
-          } else {
-            setMode(() => ViewMode);
-          }
-        }}
-      >
-      </Switch>
-      <Title order={4} c="white">Analysis Mode</Title>
+      <SegmentedControl
+      value={analysisMode}
+      onChange={changeAnalysisMode}
+      data={[
+        { label: 'Select Mode', value: 'analysis' },
+        { label: 'View Mode', value: 'view' },
+      ]}
+      />
       </Group>
       {analysisMode && (
       <>

@@ -1,50 +1,12 @@
-import { FileInput, Stack, rem, Center, Divider } from '@mantine/core';
+import { FileInput, Stack, rem, Center, Divider, HoverCard, Text } from '@mantine/core';
 import { WorldUpload } from 'tabler-icons-react';
 import SearchBar from './SearchBar';
 import { useState, useContext } from 'react'
 import { LocationContext } from './LocationProvider';
 import { FeaturesContext } from './FeaturesProvider';
 import { center, squareGrid, bbox, buffer } from '@turf/turf';
-
-function Value({ file }) {
-    return (
-      <Center
-        inline
-        sx={(theme) => ({
-          fontSize: theme.fontSizes.sm,
-          borderRadius: theme.radius.sm,
-          color: theme.colors.gray[1],
-        })}
-      >
-        <span
-          style={{
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            maxWidth: rem(200),
-            display: 'inline-block',
-          }}
-        >
-          {file.name}
-        </span>
-      </Center>
-    );
-  }
-  
-  const ValueComponent = ({ value }) => {
-    if (Array.isArray(value)) {
-      return (
-        <Group spacing="sm" py="xs">
-          {value.map((file, index) => (
-            <Value file={file} key={index} />
-          ))}
-        </Group>
-      );
-    }
-  
-    return <Value file={value} />;
-  };
-  
+import UploadGeoJSON from './UploadGeoJSON';
+import {MantineProvider} from "@mantine/core"
 
 function InputChoices() {
     const [uploadedGeoJSON, setUploadedGeoJSON] = useContext(LocationContext);
@@ -66,15 +28,32 @@ function InputChoices() {
   return (
     <div class="max-w-2xl mx-auto pb-16">
     <Stack>
-    <button class="p-6 hover:outline-blue-400">
-        <SearchBar /> 
-    </button>
-    <Divider size="lg" my="xs" label="OR" labelPosition="center" />
-    <Center>
-        <div class="text-white pt-6 hover:outline-blue-400 focus:outline-none focus:ring focus:ring-violet-300">
-            <FileInput placeholder="Upload GeoJSON" onChange={handleFileChange} icon={<WorldUpload size={rem(20)}/>} accept=".geojson,application/json" valueComponent={ValueComponent} />
+    <MantineProvider theme={{ colorScheme: 'dark' }}>
+    <HoverCard shadow="md" closeDelay={250} >
+      <HoverCard.Target>
+        <div class="p-6 hover:outline-blue-400">
+          <SearchBar /> 
         </div>
-    </Center>
+      </HoverCard.Target>
+      <HoverCard.Dropdown>
+          <Text size="sm">Then select an area to be analyzed on the map and click "Submit Selection"!</Text>
+      </HoverCard.Dropdown>
+    </HoverCard>
+    </MantineProvider>
+    <Divider size="lg" my="xs" label="OR" labelPosition="center" />
+    <HoverCard shadow="md" closeDelay={250} >
+      <HoverCard.Target>
+        <div>
+          <UploadGeoJSON />
+        </div>
+      </HoverCard.Target>
+      <MantineProvider theme={{ colorScheme: 'dark' }}>
+      <HoverCard.Dropdown>
+          <Text size="sm">Then click "Submit Selection"!</Text>
+      </HoverCard.Dropdown>
+      </MantineProvider>
+    </HoverCard>
+
     </Stack>
       </div>
   );

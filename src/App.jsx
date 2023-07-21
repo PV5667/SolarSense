@@ -8,6 +8,11 @@ import Header from './components/Header';
 import { LocationProvider } from './components/LocationProvider';
 import InputChoices from "./components/InputChoices"
 import { FeaturesProvider } from './components/FeaturesProvider';
+import {MantineProvider} from "@mantine/core"
+
+/*
+      <MantineProvider theme={{ colorScheme: 'dark' }}>
+*/
 
 function App() {
 
