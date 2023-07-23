@@ -36,7 +36,7 @@ function InputChoices() {
         </div>
       </HoverCard.Target>
       <HoverCard.Dropdown>
-          <Text size="sm">Then select an area to be analyzed on the map and click "Submit Selection"!</Text>
+          <Text size="sm">Then draw an area to be analyzed on the map and click "Submit Selection"!</Text>
       </HoverCard.Dropdown>
     </HoverCard>
     </MantineProvider>
