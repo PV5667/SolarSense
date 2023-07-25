@@ -5,14 +5,14 @@ import { Draw90DegreePolygonMode, DrawPolygonByDraggingMode, DrawPolygonMode, Vi
 import { EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
-import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal, SegmentedControl, Progress} from "@mantine/core"
+import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal, SegmentedControl, Progress, CloseButton} from "@mantine/core"
 import { MapView, FlyToInterpolator } from '@deck.gl/core';
 import { bboxPolygon, area, bbox, buffer, squareGrid } from '@turf/turf';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {LocationContext} from './LocationProvider';
 import { FeaturesContext } from './FeaturesProvider';
 import { useDisclosure } from '@mantine/hooks';
-import { WorldDownload } from 'tabler-icons-react';
+import { WorldDownload, Trash } from 'tabler-icons-react';
 
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicHY1NjY3IiwiYSI6ImNsZGFtOHVoejBiZ2Mzb3A2djgyaDl1OGEifQ.FSssERk7wLiG1fDpen0iXA';
@@ -86,7 +86,7 @@ function Map () {
               setNumPanelsFound(newPanels.length);
               setFeatures({
                 type: "FeatureCollection",
-                features: []//panels.features,
+                features: []
               });
               console.log(newPanels);
               setMode(() => ViewMode);
@@ -209,6 +209,19 @@ function Map () {
         </MapView>
         </DeckGL>
       </Box>
+      {features.features.length > 0 && (
+      <Group position="center" direction="row" spacing="xs">
+        <Title order={4} c="white">Area: {calculateArea(features)} km²</Title>
+        <button type="button" class="inline-flex items-center py-2 text-white 
+        text-md font-medium rounded-md gap-1 hover:text-red-500" 
+        onClick={() => setFeatures({type: "FeatureCollection",
+        features: []
+        })}>
+          Clear Selection
+          <Trash size={20} />
+        </button>
+      </Group>
+      )}
       <Group position="center" direction="row" spacing="xs">
       <SegmentedControl
       value={analysisMode}
