@@ -158,6 +158,11 @@ function Map () {
       const newData = squareGrid(bbox(buffer(updatedData, 0.06)), 0.12, options);
       console.log("New Data:")
       console.log(newData);
+      if (newData.features.length > 900) {
+        console.log(newData.features.length)
+        open();
+      }
+      console.log(newData.features.length);
       setFeatures(newData);
     }
   });
@@ -188,6 +193,11 @@ function Map () {
     <Modal size="xl" opened={opened} onClose={close} withCloseButton={false} centered>
         <Group position="center" direction="row" spacing="xs">
         Oops! Something went wrong. A quick refresh should fix it.
+        </Group>
+    </Modal>
+    <Modal size="xl" opened={opened} onClose={close} withCloseButton={false} centered>
+        <Group position="center" direction="row" spacing="xs">
+        Oops! Please reduce the size of your selection.
         </Group>
     </Modal>
     <div>
@@ -234,7 +244,8 @@ function Map () {
       </Group>
       {analysisMode==="analysis" && (
       <>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={submitSelection}>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-75 disabled:hover:bg-blue-500" 
+      disabled={features.features.length>900} onClick={submitSelection}>
         Submit Selection
       </button>
       </>
@@ -260,6 +271,7 @@ function Map () {
       )}
       </Stack>
       </Center>
+
     </div>
     </>
   );
