@@ -213,7 +213,7 @@ function Map () {
       <Group position="center" direction="row" spacing="xs">
         <Title order={4} c="white">Area: {calculateArea(features)} km²</Title>
         <button type="button" class="inline-flex items-center py-2 text-white 
-        text-md font-medium rounded-md gap-1 hover:text-red-500" 
+        text-md font-medium rounded-md gap-1 hover:text-red-500 p-1 outline focus:outline-none focus:ring focus:ring-red" 
         onClick={() => setFeatures({type: "FeatureCollection",
         features: []
         })}>
