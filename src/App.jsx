@@ -9,6 +9,7 @@ import { LocationProvider } from './components/LocationProvider';
 import InputChoices from "./components/InputChoices"
 import { FeaturesProvider } from './components/FeaturesProvider';
 import {MantineProvider} from "@mantine/core"
+import { Analytics } from '@vercel/analytics/react';
 
 /*
       <MantineProvider theme={{ colorScheme: 'dark' }}>
@@ -20,6 +21,7 @@ function App() {
     <div className="App">
       <FeaturesProvider>
       <LocationProvider>
+        <Analytics />
         <Header />
         <InputChoices />
         <SelectionInterface />
