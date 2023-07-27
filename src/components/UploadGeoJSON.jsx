@@ -64,7 +64,7 @@ const ValueComponent = ({ value }) => {
   };
   return (
     <Center>
-        <div class="text-white pt-6 hover:outline-blue-400 focus:outline-none focus:ring focus:ring-violet-300">
+        <div class="text-white hover:outline-blue-400 focus:outline-none focus:ring focus:ring-violet-300">
             <FileInput sx={{color:"white"}} placeholder="Upload GeoJSON" onChange={handleFileChange} icon={<WorldUpload size={rem(20)} style={{color:"white"}}/>} accept=".geojson,application/json" valueComponent={ValueComponent} />
         </div>
     </Center>

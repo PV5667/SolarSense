@@ -26,7 +26,7 @@ function InputChoices() {
       reader.readAsText(file);
   };
   return (
-    <div class="max-w-2xl mx-auto pb-16">
+    <div class="max-w-2xl mx-auto pb-8">
     <Stack>
     <MantineProvider theme={{ colorScheme: 'dark' }}>
     <HoverCard shadow="md" closeDelay={250} >
