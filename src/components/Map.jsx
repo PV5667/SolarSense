@@ -244,7 +244,7 @@ function Map () {
       </Group>
       {analysisMode==="analysis" && (
       <>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-75 disabled:hover:bg-blue-500" 
+      <button class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded disabled:opacity-75 disabled:hover:bg-blue-500" 
       disabled={features.features.length>900} onClick={submitSelection}>
         Submit Selection
       </button>
