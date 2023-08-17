@@ -32,7 +32,8 @@ function Map () {
     []
   );
   // For Error Modal
-  const [opened, {open, close}] = useDisclosure(false);
+  const [errorOpened, errorHandlers] = useDisclosure(false);
+  const [sizeOpened, sizeHandlers] = useDisclosure(false);
   const [awaitingResponse, setAwaitingResponse] = useState(false);
   const [panels, setPanels] = useState(
     []);
@@ -94,11 +95,18 @@ function Map () {
           });
       }
       else {
+          setAwaitingResponse(false);
           console.log(response);
-          open();
+          errorHandlers.open();
           throw Error('Something went wrong');
       }
   })
+  .catch(error => {
+    setAwaitingResponse(false);
+    console.log(error);
+    errorHandlers.open();
+    throw Error('Something went wrong');
+  });
   }
   function postprocessPanels (panels) {
     const processedPanels = {
@@ -160,42 +168,50 @@ function Map () {
       console.log(newData);
       if (newData.features.length > 900) {
         console.log(newData.features.length)
-        open();
+        sizeHandlers.open();
       }
       console.log(newData.features.length);
       setFeatures(newData);
     }
   });
-  // For Progress Bar
-  let interval;
+
+  let interval; // Declare the interval variable
+
   useEffect(() => {
     if (awaitingResponse) {
       interval = setInterval(() => {
-        setProgress((prev) => prev + Math.round(100/features.features.length));
-        console.log(awaitingResponse)
+        setProgress((prev) => {
+          const newProgress = prev + Math.round(100 / features.features.length);
+          return newProgress >= 100 ? "Almost Done..." : newProgress; 
+        });
       }, 2005);
     } else {
       console.log("Clearing Interval");
+      setProgress(0); 
       clearInterval(interval);
     }
-  }, [awaitingResponse]);
-
+  
+    return () => {
+      clearInterval(interval); 
+    };
+  }, [awaitingResponse, features.features.length]); 
+  
   useEffect(() => {
-    if (progress === 100 || progress > 100) {
-      setProgress("Almost Done...")
+    if (progress === 100 && awaitingResponse) { 
+      setProgress("Almost Done...");
       setAwaitingResponse(false);
       clearInterval(interval);
     }
-  }, [progress]);
+  }, [progress, awaitingResponse]);
 
   return (
     <>
-    <Modal size="xl" opened={opened} onClose={close} withCloseButton={false} centered>
+    <Modal size="xl" opened={errorOpened} onClose={errorHandlers.close} withCloseButton={false} centered>
         <Group position="center" direction="row" spacing="xs">
         Oops! Something went wrong. A quick refresh should fix it.
         </Group>
     </Modal>
-    <Modal size="xl" opened={opened} onClose={close} withCloseButton={false} centered>
+    <Modal size="xl" opened={sizeOpened} onClose={sizeHandlers.close} withCloseButton={false} centered>
         <Group position="center" direction="row" spacing="xs">
         Oops! Please reduce the size of your selection.
         </Group>
@@ -258,6 +274,12 @@ function Map () {
         </Group>
         </div>
       )}
+      <div class="p-6 space-y-4" ref={progressBarRef}>
+        <Progress value={progress} label={progress + "%"} size="xl" radius="xl" />
+        <Group position="center" direction="row" spacing="xs">
+        <Title order={4} c="white">Detecting Solar Panels...</Title>
+        </Group>
+      </div>
       {numPanelsFound > 0 && ( 
         <>
         <Title c="blue">{numPanelsFound} Panels Found</Title>
