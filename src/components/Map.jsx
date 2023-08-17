@@ -274,12 +274,6 @@ function Map () {
         </Group>
         </div>
       )}
-      <div class="p-6 space-y-4" ref={progressBarRef}>
-        <Progress value={progress} label={progress + "%"} size="xl" radius="xl" />
-        <Group position="center" direction="row" spacing="xs">
-        <Title order={4} c="white">Detecting Solar Panels...</Title>
-        </Group>
-      </div>
       {numPanelsFound > 0 && ( 
         <>
         <Title c="blue">{numPanelsFound} Panels Found</Title>
