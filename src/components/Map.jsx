@@ -181,6 +181,9 @@ function Map () {
     if (awaitingResponse) {
       interval = setInterval(() => {
         setProgress((prev) => {
+          if (prev === "Almost Done...") {
+            return "Almost Done...";
+          }
           const newProgress = prev + Math.round(100 / features.features.length);
           return newProgress >= 100 ? "Almost Done..." : newProgress; 
         });
