@@ -210,17 +210,6 @@ function Map () {
     }
   }, [progress, awaitingResponse]);
 
-  function renderTooltip ({object}) {
-    return `Lon: ${object.geometry.coordinates[0][0][0]}\nLat: ${object.geometry.coordinates[0][0][1]}`
-    /*(
-      <div>
-        <div>Lon: {object.geometry.coordinates[0][0][0]}</div>
-        <div>Lat: {object.geometry.coordinates[0][0][1]}</div>
-        <div>Area: {5}m²</div>
-      </div>
-      );
-      */
-  }
   return (
     <>
     <Modal size="xl" opened={errorOpened} onClose={errorHandlers.close} withCloseButton={false} centered>
@@ -246,7 +235,7 @@ function Map () {
           id="deck-gl"
           layers={[panelLayer, editableGjsonLayer]} 
           getCursor={editableGjsonLayer.getCursor.bind(editableGjsonLayer)}
-          getTooltip={mode===ViewMode ? ({object}) => object && `Area: ${area(object)} m²\nLon: ${object.geometry.coordinates[0][0][0].toFixed(4)}\nLat: ${object.geometry.coordinates[0][0][1].toFixed(4)}`: null}
+          getTooltip={mode===ViewMode ? ({object}) => object && `Area: ${area(object).toFixed(3)} m²\nLon: ${object.geometry.coordinates[0][0][0].toFixed(4)}\nLat: ${object.geometry.coordinates[0][0][1].toFixed(4)}`: null}
         >
         <MapView id="map" controller={false} width="100%" height="100%">
             <StaticMap mapStyle="mapbox://styles/mapbox/satellite-v9" mapboxAccessToken={MAPBOX_ACCESS_TOKEN} />
