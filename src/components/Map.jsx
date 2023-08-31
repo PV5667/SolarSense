@@ -7,7 +7,7 @@ import {GeoJsonLayer, PolygonLayer} from '@deck.gl/layers';
 import StaticMap from 'react-map-gl';
 import {Box, Button, Grid, Stack, Center, Title, Switch, Group, Loader, Modal, SegmentedControl, Progress, CloseButton} from "@mantine/core"
 import { MapView, FlyToInterpolator } from '@deck.gl/core';
-import { bboxPolygon, area, bbox, buffer, squareGrid } from '@turf/turf';
+import { bboxPolygon, area, bbox, buffer, squareGrid, lineString} from '@turf/turf';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {LocationContext} from './LocationProvider';
 import { FeaturesContext } from './FeaturesProvider';
@@ -147,10 +147,13 @@ function Map () {
     data: panels,
     pickable: true,
     filled: true,
-    extruded: false,
+    extruded: true,
     wireframe: true,
     getPolygon: d => d.geometry.coordinates,
-    getFillColor: [255, 0, 0],
+    getFillColor: [192, 132, 252],
+    getLineColor: [168, 85, 247],
+    getLineWidth: 0.3,
+    getElevation: 1,
     _normalize: true,
   });
   
@@ -207,6 +210,17 @@ function Map () {
     }
   }, [progress, awaitingResponse]);
 
+  function renderTooltip ({object}) {
+    return `Lon: ${object.geometry.coordinates[0][0][0]}\nLat: ${object.geometry.coordinates[0][0][1]}`
+    /*(
+      <div>
+        <div>Lon: {object.geometry.coordinates[0][0][0]}</div>
+        <div>Lat: {object.geometry.coordinates[0][0][1]}</div>
+        <div>Area: {5}m²</div>
+      </div>
+      );
+      */
+  }
   return (
     <>
     <Modal size="xl" opened={errorOpened} onClose={errorHandlers.close} withCloseButton={false} centered>
@@ -232,6 +246,7 @@ function Map () {
           id="deck-gl"
           layers={[panelLayer, editableGjsonLayer]} 
           getCursor={editableGjsonLayer.getCursor.bind(editableGjsonLayer)}
+          getTooltip={mode===ViewMode ? ({object}) => object && `Area: ${area(object)} m²\nLon: ${object.geometry.coordinates[0][0][0].toFixed(4)}\nLat: ${object.geometry.coordinates[0][0][1].toFixed(4)}`: null}
         >
         <MapView id="map" controller={false} width="100%" height="100%">
             <StaticMap mapStyle="mapbox://styles/mapbox/satellite-v9" mapboxAccessToken={MAPBOX_ACCESS_TOKEN} />
@@ -279,7 +294,7 @@ function Map () {
       )}
       {numPanelsFound > 0 && ( 
         <>
-        <Title c="blue">{numPanelsFound} Panels Found</Title>
+        <Title style={{color: "#e8caf1"}}>{numPanelsFound} Panels Found</Title>
         <div class="max-w-6xl mx-auto pb-16">
         <button type="button" class="inline-flex items-center px-4 py-2 text-white text-md font-medium rounded-md gap-2.5 outline outline-1 hover:outline-blue-400 focus:outline-none focus:ring focus:ring-violet-300" onClick={downloadPanelsGeoJSON}>
           <WorldDownload size={20} />

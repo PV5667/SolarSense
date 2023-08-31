@@ -17,6 +17,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mantine/core": "^6.0.10",
+    "@mapbox/geojson-area": "^0.2.2",
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
     "@mapbox/search-js-react": "^1.0.0-beta.16",
     "@nebula.gl/layers": "^1.0.4",
