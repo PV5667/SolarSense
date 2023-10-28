@@ -150,7 +150,7 @@ function Map () {
     extruded: true,
     wireframe: true,
     getPolygon: d => d.geometry.coordinates,
-    getFillColor: [192, 132, 252],
+    getFillColor: [255, 0, 0], //192, 132, 252
     getLineColor: [168, 85, 247],
     getLineWidth: 0.3,
     getElevation: 1,
