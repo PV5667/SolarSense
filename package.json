@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/traverse": "^7.23.2",
     "@chakra-ui/react": "^2.7.1",
     "@deck.gl/core": "^8.9.12",
     "@deck.gl/layers": "^8.9.13",
@@ -26,6 +27,7 @@
     "@vercel/analytics": "^1.0.1",
     "deck.gl": "^8.9.0",
     "framer-motion": "^10.12.21",
+    "http-cache-semantics": "^4.1.1",
     "mapbox-gl": "^2.15.0",
     "mapbox-gl-geocoder": "^2.0.1",
     "node-fetch": "^3.3.1",
@@ -48,6 +50,6 @@
     "eslint-plugin-react-refresh": "^0.3.4",
     "postcss": "^8.4.23",
     "tailwindcss": "^3.3.2",
-    "vite": "^4.3.2"
+    "vite": "^4.5.0"
   }
 }
