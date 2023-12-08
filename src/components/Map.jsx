@@ -40,7 +40,7 @@ function Map () {
   const [numPanelsFound, setNumPanelsFound] = useState(0);
   const [progress, setProgress] = useState(0);
   const location = useContext(LocationContext)[0];
-  console.log(location)
+  //console.log(location)
   const constructedViewState = {
     latitude: location["center"][1],
     longitude: location["center"][0],
@@ -59,10 +59,10 @@ function Map () {
     scrollToBottom()
   }, [awaitingResponse]);
 
-  console.log("Map.jsx location: ", location);
+  //console.log("Map.jsx location: ", location);
 
   function submitSelection () {
-    console.log("Inputted Selection:" + JSON.stringify(features));
+    //console.log("Inputted Selection:" + JSON.stringify(features));
     setAwaitingResponse(true);
     //http://127.0.0.1:5000/detect
     //https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect
@@ -81,7 +81,7 @@ function Map () {
         setAwaitingResponse(false);
           response.json()
           .then(function(response) {
-              console.log(typeof(JSON.parse(response)));
+              //console.log(typeof(JSON.parse(response)));
               const newPanels = JSON.parse(response).features;
               setPanels(newPanels);
               setNumPanelsFound(newPanels.length);
@@ -89,21 +89,21 @@ function Map () {
                 type: "FeatureCollection",
                 features: []
               });
-              console.log(newPanels);
+              //console.log(newPanels);
               setMode(() => ViewMode);
               setAnalysisMode("view");
           });
       }
       else {
           setAwaitingResponse(false);
-          console.log(response);
+          //console.log(response);
           errorHandlers.open();
           throw Error('Something went wrong');
       }
   })
   .catch(error => {
     setAwaitingResponse(false);
-    console.log(error);
+    //console.log(error);
     errorHandlers.open();
     throw Error('Something went wrong');
   });
@@ -113,11 +113,11 @@ function Map () {
       type: "FeatureCollection",
       features: panels//panels.features,
     };
-    console.log(processedPanels);
+    //console.log(processedPanels);
     return processedPanels;
   }
   function downloadPanelsGeoJSON (){
-    console.log("Downloading Panels GeoJSON");
+    //console.log("Downloading Panels GeoJSON");
     const processedPanels = postprocessPanels(panels);
     const file = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(processedPanels));
     const element = document.createElement("a");
@@ -164,16 +164,16 @@ function Map () {
     mode: mode, 
     selectedFeatureIndexes: selectedFeatureIndexes,
     onEdit: ({ updatedData }) => {
-      console.log(updatedData);
+      //console.log(updatedData);
       const options = { units: "kilometers", mask: updatedData};
       const newData = squareGrid(bbox(buffer(updatedData, 0.06)), 0.12, options);
-      console.log("New Data:")
+      //console.log("New Data:")
       console.log(newData);
       if (newData.features.length > 900) {
-        console.log(newData.features.length)
+        //console.log(newData.features.length)
         sizeHandlers.open();
       }
-      console.log(newData.features.length);
+      //console.log(newData.features.length);
       setFeatures(newData);
     }
   });
@@ -192,7 +192,7 @@ function Map () {
         });
       }, 2005);
     } else {
-      console.log("Clearing Interval");
+      //console.log("Clearing Interval");
       setProgress(0); 
       clearInterval(interval);
     }
