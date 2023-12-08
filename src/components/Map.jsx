@@ -67,7 +67,7 @@ function Map () {
     //http://127.0.0.1:5000/detect
     //https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect
     //https://api.lec-hacks.org/detect
-    fetch('https://api.lec-hacks.org/detect', {
+    fetch('https://api.pvirupaksha.com/detect', {
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
@@ -150,7 +150,7 @@ function Map () {
     extruded: true,
     wireframe: true,
     getPolygon: d => d.geometry.coordinates,
-    getFillColor: [192, 132, 252],
+    getFillColor: [255, 0, 0],
     getLineColor: [168, 85, 247],
     getLineWidth: 0.3,
     getElevation: 1,
