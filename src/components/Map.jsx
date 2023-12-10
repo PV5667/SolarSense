@@ -159,7 +159,7 @@ function Map () {
     } else {
       panelsToPlot = panels;
     }
-    console.log("Inside Get Clusters: " + panelsToPlot.length)
+    //console.log("Inside Get Clusters: " + panelsToPlot.length)
     if (panelsToPlot.length == 0) {
       return [];
     }
@@ -218,7 +218,7 @@ function Map () {
       id: "icon-layer",
       data: clusters,
       pickable: false,
-      iconAtlas: "./src/assets/location-icon-atlas.png",
+      iconAtlas: "./location-icon-atlas.png",
       iconMapping: "https://raw.githubusercontent.com/visgl/deck.gl/8.9-release/examples/website/icon/data/location-icon-mapping.json",
       getIcon: d => getIconName(d.properties.cluster ? d.properties.point_count : 1),
       getSize: d => getIconSize(d.properties.cluster ? d.properties.point_count : 1),
@@ -249,11 +249,11 @@ function Map () {
     mode: mode, 
     selectedFeatureIndexes: selectedFeatureIndexes,
     onEdit: ({ updatedData }) => {
-      console.log(updatedData);
+      //console.log(updatedData);
       const options = { units: "kilometers", mask: updatedData};
       const newData = squareGrid(bbox(buffer(updatedData, 0.06)), 0.12, options);
-      console.log("New Data:")
-      console.log(newData);
+      //console.log("New Data:")
+      //console.log(newData);
       if (newData.features.length > 900) {
         //console.log(newData.features.length)
         sizeHandlers.open();
@@ -273,12 +273,12 @@ function Map () {
             return "Almost Done...";
           }
           const newProgress = +((prev + (100 / features.features.length)).toFixed(2));
-          console.log("Working...." + newProgress);
+          //console.log("Working...." + newProgress);
           return newProgress >= 100 ? "Almost Done..." : newProgress; 
         });
       }, 2005);
     } else {
-      console.log("Clearing Interval");
+      //console.log("Clearing Interval");
       setProgress(0); 
       clearInterval(interval);
     }
