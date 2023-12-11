@@ -71,6 +71,8 @@ function Map () {
   function submitSelection () {
     //console.log("Inputted Selection:" + JSON.stringify(features));
     setAwaitingResponse(true);
+    setMode(() => ViewMode);
+    setAnalysisMode("view");
     //http://127.0.0.1:5000/detect
     //https://flask-service.1ub7bv2ebr060.us-east-1.cs.amazonlightsail.com/detect
     //https://api.lec-hacks.org/detect
@@ -97,8 +99,8 @@ function Map () {
                 features: []
               });
               console.log(newPanels);
-              setMode(() => ViewMode);
-              setAnalysisMode("view");
+              //setMode(() => ViewMode);
+              //setAnalysisMode("view");
               handleViewStateChange(viewState, newPanels);
           });
       }
